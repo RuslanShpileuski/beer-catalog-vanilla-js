@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" data-framework="javascript">
+
+<head>
+    <meta charset="utf-8">
+    <title>VanillaJS • BeerCatalog</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/grid.css">
+</head>
+
+<body>
+    <section id="beerCatalogApp">
+        <header id="header">
+            <h1>Beers</h1>
+        </header>
+        <section id="main">
+            <input id="toggle-all" type="checkbox">
+            <label for="toggle-all">Mark all as favorite</label>
+            <ul id="beer-list"></ul>
+        </section>
+        <footer id="footer">
+            <span id="beer-count"></span>
+            <ul id="filters">
+                <li>
+                    <a href="#/" class="selected">All</a>
+                </li>
+                <li>
+                    <a href="#/Starred">Starred</a>
+                </li>
+            </ul>
+            <button id="clear-favorite">Clear favorite</button>
+        </footer>
+    </section>
+    <footer id="info">
+    </footer>
+    <script src="js/helpers.js"></script>
+    <script src="js/dataStorage.js"></script>
+    <script src="js/model.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/view.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
