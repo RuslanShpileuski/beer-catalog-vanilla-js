@@ -28,7 +28,7 @@ var Helper = (function () {
             return function (selector, event, handler) {
                 if (!eventRegistry[event]) {
                     eventRegistry[event] = [];
-                    on(document.documentElement, event, dispatchEvent, true);
+                    this.on(document.documentElement, event, dispatchEvent, true);
                 }
 
                 eventRegistry[event].push({

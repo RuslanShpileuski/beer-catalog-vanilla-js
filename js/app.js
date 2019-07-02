@@ -3,7 +3,8 @@
 
     function BeerCatalog(name){
         this.dataStorage = new app.DataStorage(name);
-        this.model = new app.Model(this.dataStorage);
+        this.punkApi = new app.PunkApi();
+        this.model = new app.Model(this.dataStorage, this.punkApi);
         this.template = new app.Template();
         this.view = new app.View(this.template);
         this.controller = new app.Controller(this.model, this.view);

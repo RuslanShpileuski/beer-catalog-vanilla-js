@@ -1,8 +1,9 @@
 (function (window) {
     'use strict';
 
-    function Model(dataStorage) {
+    function Model(dataStorage, punkApi) {
         this.dataStorage = dataStorage;
+        this.punkApi = punkApi;
     }
 
     Model.prototype.read = function (query, callback) {
