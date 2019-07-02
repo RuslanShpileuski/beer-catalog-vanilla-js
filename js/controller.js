@@ -4,7 +4,25 @@
         var self = this;
         self.model = model;
         self.view = view;
+
+        self.view.bind('itemToggle', function (item) {
+			that.toggleComplete(item.id, item.starred);
+		});
     };
+
+    Controller.prototype.toggleComplete = function (id, starred, silent) {
+		var self = this;
+		self.model.update(id, { starred: starred }, function () {
+			self.view.render('elementComplete', {
+				id: id,
+				completed: completed
+			});
+		});
+
+		if (!silent) {
+			self._filter();
+		}
+	};
 
     Controller.prototype.setView = function (locationHash) {
         var route = locationHash.split('/')[1];
@@ -13,16 +31,16 @@
     };
 
     Controller.prototype.showAll = function () {
-        var that = this;
-        that.model.read(function (data) {
-            that.view.render('showEntries', data);
+        var self = this;
+        self.model.read(function (data) {
+            self.view.render('showEntries', data);
         });
     };
 
     Controller.prototype.showStarred = function () {
-        var that = this;
-        that.model.read({ starred: true }, function (data) {
-            that.view.render('showEntries', data);
+        var self = this;
+        self.model.read({ starred: true }, function (data) {
+            self.view.render('showEntries', data);
         });
     };
 

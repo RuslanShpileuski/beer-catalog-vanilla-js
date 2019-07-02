@@ -17,4 +17,4 @@
 
     helper.on(window, 'load', setView);
     helper.on(window, 'hashchange', setView);
-})(Helper);
+})(Helper || {});

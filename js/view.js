@@ -4,12 +4,12 @@
         this.$beersList = Helper.qs('#beer-list');
         this.$beersCounter = Helper.qs('#beer-count');
     };
-    
+
     View.prototype._setFilter = function (currentPage) {
         Helper.qs('#filters .selected').className = '';
         Helper.qs('#filters [href="#/' + currentPage + '"]').className = 'selected';
     };
-    
+
     View.prototype.render = function (viewCmd, parameter) {
         var self = this;
         var viewCommands = {
@@ -26,7 +26,24 @@
 
         viewCommands[viewCmd]();
     };
-    
+
+    View.prototype.bind = function (event, handler) {
+        var self = this;
+        if (event === 'itemToggle') {
+            Helper.live('', 'click', function () {
+                handler({
+                    id: self._itemId(this),
+                    starred: this.checked
+                });
+            });
+        }
+    };
+
+    View.prototype._itemId = function (element) {
+        var li = Helper.parent(element, 'li');
+        return parseInt(li.dataset.id, 10);
+    };
+
     window.app = window.app || {};
     window.app.View = View;
 }(window, Helper || {}));
