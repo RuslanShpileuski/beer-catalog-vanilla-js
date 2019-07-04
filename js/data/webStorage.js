@@ -1,5 +1,4 @@
 (function (window) {
-
     function WebStorage(name, callback) {
         callback = callback || function () { };
 

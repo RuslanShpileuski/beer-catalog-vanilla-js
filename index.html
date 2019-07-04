@@ -22,10 +22,6 @@
             </ul>
         </header>
         <section id="main">
-            <ul id="beer-list"></ul>
-        </section>
-        <footer id="footer">
-            <span id="beer-count"></span>
             <ul id="filters">
                 <li>
                     <input type="text" placeholder="Search beers...">
@@ -34,18 +30,22 @@
                     <strong>Filter results</strong>
                 </li>
                 <li>
-                    Alcohol by volume:
-                    <input type="range" min="1" max="100" value="50" id="abvSlider">
+                    <div>Alcohol by volume:</div>
+                    <input title="" type="range" min="1" max="100" value="50" id="abvSlider">
                 </li>
                 <li>
-                    International Bitterness Units:
+                    <div>International Bitterness Units:</div>
                     <input type="range" min="1" max="100" value="50" id="ibuSlider">
                 </li>
                 <li>
-                    Color by EBC:
+                    <div>Color by EBC:</div>
                     <input type="range" min="1" max="100" value="50" id="cbebcSlider">
                 </li>
             </ul>
+            <ul id="beer-list"></ul>
+        </section>
+        <footer id="footer">
+            <span id="beer-count"></span>
         </footer>
     </section>
     <footer id="info">
@@ -53,12 +53,20 @@
 
     <script src="js/helpers/helpers.js"></script>
     <script src="js/data/webStorage.js"></script>
+    <script src="js/data/api.js"></script>
+
     <script src="js/models/beerModel.js"></script>
     <script src="js/models/sliderModel.js"></script>
-    <script src="js/data/api.js"></script>
+
     <script src="js/views/templates/beerListTemplate.js"></script>
+    <script src="js/views/templates/sliderTemplate.js"></script>
+
     <script src="js/views/beerListView.js"></script>
+    <script src="js/views/sliderView.js"></script>
+
     <script src="js/controllers/beerController.js"></script>
+    <script src="js/controllers//sliderController.js"></script>
+    
     <script src="js/routing/router.js"></script>
     <script src="js/app.js"></script>
 </body>

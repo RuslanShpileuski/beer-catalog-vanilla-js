@@ -4,10 +4,17 @@
     function BeerCatalog(name) {
         this.webStorage = new app.WebStorage(name);
         this.punkApi = new app.PunkApi();
+
         this.beerModel = new app.BeerModel(this.webStorage, this.punkApi);
         this.beerListTemplate = new app.BeerListTemplate();
         this.beerListView = new app.BeerListView(this.beerListTemplate);
         this.beerController = new app.BeerController(this.beerModel, this.beerListView);
+
+        this.sliderModel = new app.SliderModel();
+        this.sliderTemplate = new app.SliderTemplate();
+        this.sliderView = new app.SliderView(this.sliderTemplate);
+        this.sliderController = new app.SliderController(this.sliderModel, this.SliderView);
+
         this.router = new app.Router();
     }
 
@@ -18,33 +25,34 @@
     }
 
     function initRouter() {
+
         var appArea = document.body.appendChild(document.createElement("div"));
 
         //Add dashboard route
-        beerCatalog.router.addRoute("dashboard", "", (function dashboardController() {
+        beerCatalog.router.addRoute("home", "", (function dashboardController() {
             //Scope specific elements
             var header = document.createElement("h1");
-            header.textContent = "Dashboard";
+            header.textContent = "Home";
             //Return initializer function
             return function initialize() {
                 //Apply route
                 appArea.appendChild(header);
                 //Destroy elements on exit
-                Router.onScopeDestroy(dashboardExitController);
+                Router.onScopeDestroy(homeExitController);
             };
             //Unloading function
-            function dashboardExitController() {
+            function homeExitController() {
                 appArea.removeChild(header);
             }
         })());
 
         //Add dashboard route
-        beerCatalog.router.addRoute("dashboard", "", (function dashboardController() {
+        beerCatalog.router.addRoute("home", "", (function dashboardController() {
             //Scope specific elements
             var header = document.createElement("h1");
-            header.textContent = "Dashboard";
+            header.textContent = "Home";
             var links = document.createElement("ol");
-            links.innerHTML = "<li><a href=\"#todo\">To-Do</a></li><li><a href=\"#calendar\">Calendar</a></li>";
+            links.innerHTML = "<li><a href=\"#beers\">All beers</a></li><li><a href=\"#favorites\">Favorites</a></li>";
             //Return initializer function
             return function initialize() {
                 //Apply route
@@ -63,14 +71,14 @@
         //Add other routes
         beerCatalog.router.addRoutes([
             {
-                name: "todo",
-                url: "todo",
+                name: "beers",
+                url: "beers",
                 callback: (function todoController() {
                     //Scope specific elements
                     var header = document.createElement("h1");
-                    header.textContent = "To-do";
+                    header.textContent = "All beers";
                     var links = document.createElement("ol");
-                    links.innerHTML = "<li><a href=\"#\">Dashboard</a></li><li><a href=\"#calendar\">Calendar</a></li>";
+                    links.innerHTML = "<li><a href=\"#\">Home</a></li><li><a href=\"#favorites\">Favorites</a></li>";
                     //Return initializer function
                     return function initialize() {
                         //Apply route
@@ -87,14 +95,14 @@
                 })()
             },
             {
-                name: "calendar",
-                url: "calendar",
+                name: "favorites",
+                url: "favorites",
                 callback: (function calendarController() {
                     //Scope specific elements
                     var header = document.createElement("h1");
-                    header.textContent = "Calendar";
+                    header.textContent = "My favorites";
                     var links = document.createElement("ol");
-                    links.innerHTML = "<li><a href=\"#\">Dashboard</a></li><li><a href=\"#todo\">To-Do</a></li>";
+                    links.innerHTML = "<li><a href=\"#\">Home</a></li><li><a href=\"#beers\">All beers</a></li>";
                     //Return initializer function
                     return function initialize() {
                         //Apply route
@@ -115,8 +123,13 @@
         beerCatalog.router.init();
     }
 
-    helper.on(window, 'load', setView);
-    helper.on(window, 'hashchange', setView);
-    helper.on(document, 'DOMContentLoaded', initRouter);
+    var init = function () {
+        setView();
+        initRouter();
+    };
+
+    helper.on(window, 'load', init);
+    // helper.on(window, 'hashchange', setView);
+    //helper.on(window, 'DOMContentLoaded', initRouter);
 
 })(Helper || {});

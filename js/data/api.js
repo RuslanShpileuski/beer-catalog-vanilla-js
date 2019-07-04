@@ -1,6 +1,5 @@
 /*global $ajaxGet */
 (function (window) {
-
     function PunkApi() {
         var self = this;
 

@@ -11,20 +11,17 @@
 
     //Initializer function. Call this to change listening for window changes.
     Router.prototype.init = function () {
+        var self = this;
         //Remove previous event listener if set
         if (this.listener !== null) {
             $help.remove('popstate', this.listener);
             this.listener = null;
         }
         //Set new listener for "popstate"
-        $help.on(window, 'popstate', function () {
-            //Callback to Route checker on window state change
-            this.checkRoute.call(this);
-        }.bind(this));
+        $help.on(window, 'popstate', self.checkRoute.bind(self));
+
         //Call initial routing as soon as thread is available
-        setTimeout(function () {
-            this.checkRoute.call(this);
-        }.bind(this), 0);
+        setTimeout(self.checkRoute.bind(self), 0);
 
         return this;
     };
@@ -73,10 +70,11 @@
 
     //Check which route to activate
     Router.prototype.checkRoute = function () {
+        var self = this;
         //Get hash
         var hash = window.location.hash.substr(1).replace(/\//ig, '/');
         //Default to first registered route. This should probably be your 404 page.
-        var route = this.routes[0];
+        var route = self.routes[0];
         //Check each route
         for (var routeIndex = 0; routeIndex < this.routes.length; routeIndex++) {
             var routeToTest = this.routes[routeIndex];

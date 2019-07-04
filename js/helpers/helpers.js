@@ -19,11 +19,13 @@ var Helper = (function () {
                 var targetElement = event.target;
 
                 eventRegistry[event.type].forEach(function (entry) {
-                    var potentialElements = window.qsa(entry.selector);
-                    var hasMatch = Array.prototype.indexOf.call(potentialElements, targetElement) >= 0;
+                    if (entry.selector) {
+                        var potentialElements = Helper.qsa(entry.selector);
+                        var hasMatch = Array.prototype.indexOf.call(potentialElements, targetElement) >= 0;
 
-                    if (hasMatch) {
-                        entry.handler.call(targetElement, event);
+                        if (hasMatch) {
+                            entry.handler.call(targetElement, event);
+                        }
                     }
                 });
             }
@@ -31,7 +33,7 @@ var Helper = (function () {
             return function (selector, event, handler) {
                 if (!eventRegistry[event]) {
                     eventRegistry[event] = [];
-                    this.on(document.documentElement, event, dispatchEvent, true);
+                    Helper.on(document.documentElement, event, dispatchEvent, true);
                 }
 
                 eventRegistry[event].push({
