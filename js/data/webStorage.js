@@ -1,6 +1,6 @@
 (function (window) {
 
-    function DataStorage(name, callback) {
+    function WebStorage(name, callback) {
         callback = callback || function () { };
 
         this._storageName = name;
@@ -16,7 +16,7 @@
         callback.call(this, JSON.parse(localStorage[name]));
     };
 
-    DataStorage.prototype.find = function (query, callback) {
+    WebStorage.prototype.find = function (query, callback) {
         if (!callback) {
             return;
         }
@@ -33,7 +33,7 @@
         }));
     };
 
-    DataStorage.prototype.save = function (updateDataItem, callback, id) {
+    WebStorage.prototype.save = function (updateDataItem, callback, id) {
         callback = callback || function () { };
 
         var data = JSON.parse(localStorage[this._storageName]);
@@ -62,16 +62,16 @@
         }
     };
 
-    DataStorage.prototype.findAll = function (callback) {
+    WebStorage.prototype.findAll = function (callback) {
         callback = callback || function () { };
         callback.call(this, JSON.parse(localStorage[this._storageName]).beers)
     };
 
-    DataStorage.prototype.drop = function (callback) {
+    WebStorage.prototype.drop = function (callback) {
         localStorage[this._storageName] = JSON.stringify({ beers: [] })
         callback.call(this, JSON.parse(localStorage[this._storageName]).beers);
     };
 
     window.app = window.app || {};
-    window.app.DataStorage = DataStorage;
+    window.app.WebStorage = WebStorage;
 }(window));

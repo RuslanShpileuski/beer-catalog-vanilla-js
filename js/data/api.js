@@ -21,26 +21,26 @@
             ids	string (id|id|...)	Returns all beers matching the supplied ID's. You can pass in multiple ID's by separating them with a | symbol 
         */
 
-        self.parms = ['abv_gt', 'abv_lt', 'ibu_gt', 'ibu_lt', 'ebc_gt', 'ebc_lt', 'beer_name', 'yeast', 'brewed_before', 'brewed_after', 'hops', 'malt', 'food', 'ids'];
+        self.params = ['abv_gt', 'abv_lt', 'ibu_gt', 'ibu_lt', 'ebc_gt', 'ebc_lt', 'beer_name', 'yeast', 'brewed_before', 'brewed_after', 'hops', 'malt', 'food', 'ids'];
         self.basicUrl = 'https://api.punkapi.com/v2/beers/';
     };
 
     PunkApi.prototype.getBeers = function (params, callback) {
         var self = this;
         var beersUrl = self._buildBeersUrl(params);
-        return Helper.ajaxGet(beersUrl, callback);
+        return JSON.parse(Helper.ajaxGET(beersUrl, callback));
     };
 
     PunkApi.prototype.getRandomBeer = function (callback) {
         var self = this;
         var randomBeerUrl = self._buildRandomBeerUrl();
-        return Helper.ajaxGet(randomBeerUrl, callback);
+        return JSON.parse(Helper.ajaxGET(randomBeerUrl, callback));
     };
 
     PunkApi.prototype.getBeerById = function (id, callback) {
         var self = this;
         var beerByIdUrl = self._buildBeerByIdUrl(id);
-        return Helper.ajaxGet(beerByIdUrl, callback);
+        return JSON.parse(Helper.ajaxGET(beerByIdUrl, callback));
     };
 
     PunkApi.prototype._buildBeersUrl = function (params) {
@@ -52,7 +52,7 @@
 
         var keys = Object.keys(params);
 
-        if (!Array.includes(keys)) {
+        if (!this.params.includes(keys)) {
             return self.basicUrl;
         }
 

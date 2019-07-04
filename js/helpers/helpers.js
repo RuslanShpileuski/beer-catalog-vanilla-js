@@ -1,5 +1,8 @@
 var Helper = (function () {
     return {
+        remove: function (target, type, listener, useCapture) {
+            target.removeEventListener(type, listener, !!useCapture)
+        },
         on: function (target, type, callback, useCapture) {
             target.addEventListener(type, callback, !!useCapture);
         },
@@ -46,7 +49,7 @@ var Helper = (function () {
             }
             return parent(element.parentNode, tagName);
         },
-        ajaxGET: function (url, callback) {
+        httpGET: function (url, callback) {
             var xhr = new XMLHttpRequest();
             if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
             xhr.onreadystatechange = function () {

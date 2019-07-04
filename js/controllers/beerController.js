@@ -1,21 +1,21 @@
 (function (window) {
 
-    function Controller(model, view) {
+    function BeerController(model, view) {
         var self = this;
         self.model = model;
         self.view = view;
 
         self.view.bind('itemToggle', function (item) {
-			that.toggleComplete(item.id, item.starred);
+			self.toggleFavorite(item.id, item.favorite);
 		});
     };
 
-    Controller.prototype.toggleComplete = function (id, starred, silent) {
+    BeerController.prototype.toggleFavorite = function (id, favorite, silent) {
 		var self = this;
-		self.model.update(id, { starred: starred }, function () {
-			self.view.render('elementComplete', {
+		self.model.update(id, { favorite: favorite }, function () {
+			self.view.render('elementFavorite', {
 				id: id,
-				completed: completed
+				favorite: favorite
 			});
 		});
 
@@ -24,27 +24,27 @@
 		}
 	};
 
-    Controller.prototype.setView = function (locationHash) {
+    BeerController.prototype.setView = function (locationHash) {
         var route = locationHash.split('/')[1];
         var currentPage = route || '';
         this._updateFilterState(currentPage);
     };
 
-    Controller.prototype.showAll = function () {
+    BeerController.prototype.showAll = function () {
         var self = this;
         self.model.read(function (data) {
             self.view.render('showEntries', data);
         });
     };
 
-    Controller.prototype.showStarred = function () {
+    BeerController.prototype.showFavorite = function () {
         var self = this;
-        self.model.read({ starred: true }, function (data) {
+        self.model.read({ favorite: true }, function (data) {
             self.view.render('showEntries', data);
         });
     };
 
-    Controller.prototype._updateFilterState = function (currentPage) {
+    BeerController.prototype._updateFilterState = function (currentPage) {
         this._activeRoute = currentPage;
 
         if (currentPage === '') {
@@ -56,7 +56,7 @@
         this.view.render('setFilter', currentPage);
     };
 
-    Controller.prototype._filter = function (force) {
+    BeerController.prototype._filter = function (force) {
         var activeRoute = this._activeRoute.charAt(0).toUpperCase() + this._activeRoute.substr(1);
 
         // Update the elements on the page, which change with each completed todo
@@ -72,14 +72,14 @@
         this._lastActiveRoute = activeRoute;
     };
 
-    Controller.prototype._updateCount = function () {
+    BeerController.prototype._updateCount = function () {
         var self = this;
         self.model.getCount(function (beers) {
-            self.view.render('updateElementCount', beers.starred);
+            self.view.render('updateElementCount', beers.favorite);
         });
     };
 
     // Export to window
     window.app = window.app || {};
-    window.app.Controller = Controller;
+    window.app.BeerController = BeerController;
 })(window);
