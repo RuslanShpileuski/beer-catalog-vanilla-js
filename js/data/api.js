@@ -1,5 +1,5 @@
 /*global $ajaxGet */
-(function (window) {
+(function (window, $help) {
     function PunkApi() {
         var self = this;
 
@@ -27,44 +27,48 @@
     PunkApi.prototype.getBeers = function (params, callback) {
         var self = this;
         var beersUrl = self._buildBeersUrl(params);
-        return JSON.parse(Helper.ajaxGET(beersUrl, callback));
+        var paramsType = typeof params;
+
+        if(paramsType === 'function'){
+            callback = params;
+        }
+
+        $help.httpGET(beersUrl, callback);
     };
 
     PunkApi.prototype.getRandomBeer = function (callback) {
         var self = this;
         var randomBeerUrl = self._buildRandomBeerUrl();
-        return JSON.parse(Helper.ajaxGET(randomBeerUrl, callback));
+        $help.httpGET(randomBeerUrl, callback);
     };
 
     PunkApi.prototype.getBeerById = function (id, callback) {
         var self = this;
         var beerByIdUrl = self._buildBeerByIdUrl(id);
-        return JSON.parse(Helper.ajaxGET(beerByIdUrl, callback));
+        $help.httpGET(beerByIdUrl, callback);
     };
 
     PunkApi.prototype._buildBeersUrl = function (params) {
-        var self = this;
-
         if (!params) {
-            return self.basicUrl;
+            return this.basicUrl;
         }
 
         var keys = Object.keys(params);
 
         if (!this.params.includes(keys)) {
-            return self.basicUrl;
+            return this.basicUrl;
         }
 
         var queryString = keys.map(function (key) {
             return key + '=' + params[key]
         }).join('&');
 
-        var url = [self.basicUrl, '?', queryString].join('');
+        var url = [this.basicUrl, '?', queryString].join('');
         return url;
     };
 
     PunkApi.prototype._buildBeersPerPageUrl = function (page, resultPerPage) {
-        var url = [self.basicUrl, '?page=', page, '&per_page=', resultPerPage].join('');
+        var url = [this.basicUrl, '?page=', page, '&per_page=', resultPerPage].join('');
         return url;
     };
 
@@ -72,12 +76,12 @@
         if (!id) {
             throw new Error('Id is invalid ' + id);
         }
-        var url = [self.basicUrl, id].join('');
+        var url = [this.basicUrl, id].join('');
         return url;
     };
 
     PunkApi.prototype._buildRandomBeerUrl = function () {
-        var url = [self.basicUrl, 'random'].join('');
+        var url = [this.basicUrl, 'random'].join('');
         return url;
     }
 

@@ -49,7 +49,7 @@ var Helper = (function () {
             if (element.parentNode.tagName.toLowerCase() === tagName.toLowerCase()) {
                 return element.parentNode;
             }
-            return parent(element.parentNode, tagName);
+            return Helper.parent(element.parentNode, tagName);
         },
         httpGET: function (url, callback) {
             var xhr = new XMLHttpRequest();

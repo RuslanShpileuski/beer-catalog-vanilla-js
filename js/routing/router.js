@@ -1,105 +1,94 @@
-(function (window, $help) {
-    function Router() {
-        //Tasks to perform when view changes
-        this.scopeDestroyTasks = [];
-        //Registered Routes
-        this.routes = [];
-        //Listener handle for window events
-        this.listener = null;
-        this.scopeDestroyTaskID = 0;
-    }
-
-    //Initializer function. Call this to change listening for window changes.
-    Router.prototype.init = function () {
-        var self = this;
-        //Remove previous event listener if set
-        if (this.listener !== null) {
-            $help.remove('popstate', this.listener);
-            this.listener = null;
-        }
-        //Set new listener for "popstate"
-        $help.on(window, 'popstate', self.checkRoute.bind(self));
-
-        //Call initial routing as soon as thread is available
-        setTimeout(self.checkRoute.bind(self), 0);
-
+/*
+    Taken from https://stackoverflow.com/questions/54231533/how-to-create-a-vanilla-js-routing-for-spa
+    Additional https://krasimirtsonev.com/blog/article/A-modern-JavaScript-router-in-100-lines-history-api-pushState-hash-url
+*/
+var Router = {
+    routes: [],
+    mode: null,
+    root: '/',
+    config: function (options) {
+        this.mode = options && options.mode && options.mode == 'history'
+            && !!(history.pushState) ? 'history' : 'hash';
+        this.root = options && options.root ? '/' + this.clearSlashes(options.root) + '/' : '/';
         return this;
-    };
-
-    //Adding a route to the list
-    Router.prototype.addRoute = function (name, url, callback) {
-        var route = this.routes.find(function (r) {
-            return r.name === name;
-        });
-        url = url.replace(/\//ig, '/');
-        if (route === void 0) {
-            this.routes.push({
-                callback: callback,
-                name: name.toString().toLowerCase(),
-                url: url
-            });
+    },
+    getFragment: function () {
+        var fragment = '';
+        if (this.mode === 'history') {
+            fragment = this.clearSlashes(decodeURI(location.pathname + location.search));
+            fragment = fragment.replace(/\\?(.*)$/, '');
+            fragment = this.root != '/' ? fragment.replace(this.root, '') : fragment;
+        } else {
+            var match = window.location.href.match(/#(.*)$/);
+            fragment = match ? match[1] : '';
         }
-        else {
-            route.callback = callback;
-            route.url = url;
+        return this.clearSlashes(fragment);
+    },
+    clearSlashes: function (path) {
+        return path.toString().replace(/\/$/, '').replace(/^\\/, '');
+    },
+    add: function (re, handler) {
+        if (typeof re == 'function') {
+            handler = re;
+            re = '';
         }
+        this.routes.push({ re: re, handler: handler });
         return this;
-    };
-
-    //Adding multiple routes to list
-    Router.prototype.addRoutes = function (routes) {
-        var self = this;
-        if (routes === void 0) {
-            routes = [];
-        }
-        routes.forEach(function (route) {
-            self.addRoute(route.name, route.url, route.callback);
-        });
-
-        return this;
-    };
-
-    //Removing a route from the list by route name
-    Router.prototype.removeRoute = function (name) {
-        name = name.toString().toLowerCase();
-        this.routes = this.routes.filter(function (route) {
-                return route.name != name;
-            });
-        return this;
-    };
-
-    //Check which route to activate
-    Router.prototype.checkRoute = function () {
-        var self = this;
-        //Get hash
-        var hash = window.location.hash.substr(1).replace(/\//ig, '/');
-        //Default to first registered route. This should probably be your 404 page.
-        var route = self.routes[0];
-        //Check each route
-        for (var routeIndex = 0; routeIndex < this.routes.length; routeIndex++) {
-            var routeToTest = this.routes[routeIndex];
-            if (routeToTest.url == hash) {
-                route = routeToTest;
-                break;
+    },
+    remove: function (param) {
+        for (var i = 0, r; i < this.routes.length, r = this.routes[i]; i++) {
+            if (r.handler === param || r.re.toString() === param.toString()) {
+                this.routes.splice(i, 1);
+                return this;
             }
         }
-        //Run all destroy tasks
-        this.scopeDestroyTasks.forEach(function (task) {
-            task();
-        });
-        //Reset destroy task list
-        this.scopeDestroyTasks = [];
-        //Fire route callback
-        route.callback.call(window);
-    };
-
-    //Register scope destroy tasks
-    Router.prototype.onScopeDestroy = function (callback) {
-        this.scopeDestroyTasks.push(callback);
         return this;
-    };
-
-    // Export to window
-    window.app = window.app || {};
-    window.app.Router = Router;
-})(window, Helper || {});
+    },
+    flush: function () {
+        this.routes = [];
+        this.mode = null;
+        this.root = '/';
+        return this;
+    },
+    check: function (hash) {
+        var hash = hash || this.getFragment();
+        var keys, match, routeParams;
+        for (var i = 0, max = this.routes.length; i < max; i++) {
+            routeParams = {}
+            keys = this.routes[i].re.match(/:([^\/]+)/g);
+            match = hash.match(new RegExp(this.routes[i].re.replace(/:([^\/]+)/g, "([^\/]*)")));
+            if (match) {
+                match.shift();
+                match.forEach(function (value, i) {
+                    routeParams[keys[i].replace(":", "")] = value;
+                });
+                this.routes[i].handler.call({}, routeParams);
+                return this;
+            }
+        }
+        return this;
+    },
+    listen: function () {
+        var self = this;
+        var current = this.root;
+        var fn = function () {
+            if (current !== self.getFragment()) {
+                current = self.getFragment();
+                self.check(current);
+            }
+        }
+        clearInterval(this.interval);
+        this.interval = setInterval(fn, 50);
+        return this;
+    },
+    navigate: function (path) {
+        path = path ? path : '';
+        if (this.mode === 'history') {
+            var witoutSlashes = this.clearSlashes(path);
+            history.pushState(null, null, this.root + witoutSlashes);
+        } else {
+            window.location.href = window.location.href.replace(/#(.*)$/, '') + '#' + path;
+        }
+        return this;
+    }
+}

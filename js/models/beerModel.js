@@ -6,6 +6,19 @@
         this.punkApi = punkApi;
     }
 
+    BeerModel.prototype.readBeers = function (query, callback) {
+        var queryType = typeof query;
+        callback = callback || function () { };
+
+        if (queryType === 'function') {
+            callback = query;
+            return this.punkApi.getBeers(callback);
+        } else if (queryType === 'string' || queryType === 'number') {
+            query = parseInt(query, 10);
+            this.punkApi.getBeerById(query, callback);
+        }
+    }
+
     BeerModel.prototype.read = function (query, callback) {
         var queryType = typeof query;
         callback = callback || function () { };

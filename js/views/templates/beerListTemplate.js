@@ -3,7 +3,7 @@
 		this.defaultTemplate
 			= '<li data-id="{{id}}">'
 			+ '<div class="view">'
-			+ '<label>{{title}}</label>'
+			+ '<label>{{name}}</label>'
 			+ '<label>{{tagline}}</label>'
 			+ '<button class="details">open</button>'
 			+ '<button class="favorite">{{favorite}}</button>'
@@ -26,7 +26,8 @@
 			}
 
 			template = template.replace('{{id}}', data[i].id);
-			template = template.replace('{{title}}', data[i].title);
+			template = template.replace('{{name}}', data[i].name);
+			template = template.replace('{{tagline}}', data[i].tagline);
 			template = template.replace('{{favorite}}', favorite);
 
 			view = view + template;

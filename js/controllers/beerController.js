@@ -1,55 +1,33 @@
 (function (window) {
-
     function BeerController(model, view) {
         var self = this;
         self.model = model;
         self.view = view;
 
-        self.view.bind('itemToggle', function (item) {
-			self.toggleFavorite(item.id, item.favorite);
-		});
-    };
-
-    BeerController.prototype.toggleFavorite = function (id, favorite) {
-		var self = this;
-		self.model.update(id, { favorite: favorite }, function () {
-			self.view.render('elementFavorite', {
-				id: id,
-				favorite: favorite
-			});
-		});
-	};
-
-    BeerController.prototype.showAll = function () {
-        var self = this;
-        self.model.read(function (data) {
-            self.view.render('showEntries', data);
+        self.view.bind('itemShowDetails', function (item) {
+            self.showDetails(item.id);
         });
     };
 
-    BeerController.prototype.showFavorite = function () {
+    BeerController.prototype.showBeers = function () {
         var self = this;
-        self.model.read({ favorite: true }, function (data) {
-            self.view.render('showEntries', data);
+        self.model.readBeers(function (beers) {
+            beers = JSON.parse(beers);
+            self.view.render('showEntries', beers);
         });
     };
 
-    BeerController.prototype._updateFilterState = function (currentPage) {
-        this._activeRoute = currentPage;
-
-        if (currentPage === '') {
-            this._activeRoute = 'All'
-        }
-
-        this.view.render('setFilter', currentPage);
+    BeerController.prototype.showDetails = function (item) {
+        Router.navigate('/beer-details/' + item);
     };
 
-    BeerController.prototype._updateCount = function () {
+    BeerController.prototype.showBeerDetails = function (item) {
         var self = this;
-        self.model.getCount(function (beers) {
-            self.view.render('updateElementCount', beers.favorite);
+        self.model.readBeers(item[0].id, function (data) {
+            beers = JSON.parse(data);
+            self.view.render('showEntries', beers);
         });
-    };
+    }
 
     // Export to window
     window.app = window.app || {};
