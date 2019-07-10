@@ -84,8 +84,7 @@ var Router = {
     navigate: function (path) {
         path = path ? path : '';
         if (this.mode === 'history') {
-            var witoutSlashes = this.clearSlashes(path);
-            history.pushState(null, null, witoutSlashes);
+            history.pushState(null, null, this.root + this.clearSlashes(path));
         } else {
             window.location.href = window.location.href.replace(/#(.*)$/, '') + '#' + path;
         }

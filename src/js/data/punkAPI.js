@@ -1,6 +1,5 @@
-/*global $ajaxGet */
 (function (window, $help) {
-    function PunkApi() {
+    function PunkAPI() {
         var self = this;
 
         /*  
@@ -20,72 +19,66 @@
             ids	string (id|id|...)	Returns all beers matching the supplied ID's. You can pass in multiple ID's by separating them with a | symbol 
         */
 
-        self.params = ['abv_gt', 'abv_lt', 'ibu_gt', 'ibu_lt', 'ebc_gt', 'ebc_lt', 'beer_name', 'yeast', 'brewed_before', 'brewed_after', 'hops', 'malt', 'food', 'ids'];
-        self.basicUrl = 'https://api.punkapi.com/v2/beers/';
+        self.validParams = ['abv_gt', 'abv_lt', 'ibu_gt', 'ibu_lt', 'ebc_gt', 'ebc_lt', 'beer_name', 'yeast', 'brewed_before', 'brewed_after', 'hops', 'malt', 'food', 'ids'];
+        self.baseUrl = 'https://api.punkapi.com/v2/beers/';
     };
 
-    PunkApi.prototype.getBeers = function (params, callback) {
-        var self = this;
-        var beersUrl = self._buildBeersUrl(params);
+    PunkAPI.prototype.getBeers = function (params, callback) {
         var paramsType = typeof params;
 
         if(paramsType === 'function'){
             callback = params;
         }
 
-        $help.httpGET(beersUrl, callback);
+        $help.httpGET(this._buildBeersUrl(params), callback);
     };
 
-    PunkApi.prototype.getRandomBeer = function (callback) {
-        var self = this;
-        var randomBeerUrl = self._buildRandomBeerUrl();
-        $help.httpGET(randomBeerUrl, callback);
+    PunkAPI.prototype.getRandomBeer = function (callback) {
+        $help.httpGET(this._buildRandomBeerUrl(), callback);
     };
 
-    PunkApi.prototype.getBeerById = function (id, callback) {
-        var self = this;
-        var beerByIdUrl = self._buildBeerByIdUrl(id);
-        $help.httpGET(beerByIdUrl, callback);
+    PunkAPI.prototype.getBeerById = function (id, callback) {
+        $help.httpGET(this._buildBeerByIdUrl(id), callback);
     };
 
-    PunkApi.prototype._buildBeersUrl = function (params) {
+    PunkAPI.prototype._buildBeersUrl = function (params) {
         if (!params) {
-            return this.basicUrl;
+            return this.baseUrl;
         }
 
         var keys = Object.keys(params);
 
-        if (!this.params.includes(keys)) {
-            return this.basicUrl;
+        if (!this.validParams.includes(keys)) {
+            return this.baseUrl;
         }
 
         var queryString = keys.map(function (key) {
             return key + '=' + params[key]
         }).join('&');
 
-        var url = [this.basicUrl, '?', queryString].join('');
+        var url = [this.baseUrl, '?', queryString].join('');
         return url;
     };
 
-    PunkApi.prototype._buildBeersPerPageUrl = function (page, resultPerPage) {
-        var url = [this.basicUrl, '?page=', page, '&per_page=', resultPerPage].join('');
+    PunkAPI.prototype._buildBeersPerPageUrl = function (page, resultPerPage) {
+        var url = [this.baseUrl, '?page=', page, '&per_page=', resultPerPage].join('');
         return url;
     };
 
-    PunkApi.prototype._buildBeerByIdUrl = function (id) {
+    PunkAPI.prototype._buildBeerByIdUrl = function (id) {
         if (!id) {
             throw new Error('Id is invalid ' + id);
         }
-        var url = [this.basicUrl, id].join('');
+        var url = [this.baseUrl, id].join('');
         return url;
     };
 
-    PunkApi.prototype._buildRandomBeerUrl = function () {
-        var url = [this.basicUrl, 'random'].join('');
+    PunkAPI.prototype._buildRandomBeerUrl = function () {
+        var url = [this.baseUrl, 'random'].join('');
         return url;
     }
 
     // Export to window
     window.app = window.app || {};
-    window.app.PunkApi = PunkApi;
+    window.app.PunkAPI = PunkAPI;
 }(window, Helper || {}));

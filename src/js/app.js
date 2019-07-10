@@ -4,10 +4,10 @@
     function BeerCatalog(name) {
         // Data
         this.webStorage = new app.WebStorage(name);
-        this.punkApi = new app.PunkApi();
+        this.punkAPI = new app.PunkAPI();
 
         // MVC 
-        this.beerModel = new app.BeerModel(this.webStorage, this.punkApi);
+        this.beerModel = new app.BeerModel(this.webStorage, this.punkAPI);
         this.beerListTemplate = new app.BeerListTemplate();
         this.beerListView = new app.BeerListView(this.beerListTemplate);
         this.beerController = new app.BeerController(this.beerModel, this.beerListView);
@@ -19,9 +19,11 @@
     var beerCatalog = new BeerCatalog('beerCatalog');
 
     function initRouter() {
-        Router.config({mode: 'history'}).add('/landing-page', function () {
+        Router.config({mode: ''}).add('/landing-page', function () {
+            console.log('landing-page request');
             beerCatalog.beerController.showBeers();
         }).add('/beer-details/:id', function () {
+            console.log('beer-details request');
             beerCatalog.beerController.showBeerDetails(arguments);
         });
 
