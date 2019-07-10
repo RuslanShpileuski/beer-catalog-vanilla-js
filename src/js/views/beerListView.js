@@ -12,6 +12,9 @@
             showEntries: function () {
                 self.$beersList.innerHTML = self.template.show(parameter);
             },
+            appendEntries: function () {
+                self.$beersList.innerHTML += self.template.show(parameter);
+            },
             updateElementCount: function () {
                 self.$beersCounter.innerHTML = self.template.itemCounter(parameter);
             },
@@ -23,17 +26,21 @@
     BeerListView.prototype.bind = function (event, handler) {
         var self = this;
         if (event === 'itemShowDetails') {
-            $help.live('#beer-list li button', 'click', function () {
+            $help.live('#beer-list div button.details', 'click', function () {
                 handler({
                     id: self._itemId(this)
                 });
             });
+        } else if (event === 'loadNextPage') {
+            $help.live('scroll', 'scroll', function () {
+                $help.scroll(handler)
+            })
         }
     };
 
     BeerListView.prototype._itemId = function (element) {
-        var li = Helper.parent(element, 'li');
-        return parseInt(li.dataset.id, 10);
+        var div = Helper.parent(element, 'div');
+        return parseInt(div.dataset.id, 10);
     };
 
     window.app = window.app || {};

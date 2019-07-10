@@ -26,11 +26,17 @@
     PunkAPI.prototype.getBeers = function (params, callback) {
         var paramsType = typeof params;
 
-        if(paramsType === 'function'){
+        if (paramsType === 'function') {
             callback = params;
         }
 
         $help.httpGET(this._buildBeersUrl(params), callback);
+    };
+
+    PunkAPI.prototype.getBeersPerPage = function (options, callback) {
+        options = options || { page: 0, resultPerPage: 6 }
+        var url = this._buildBeersPerPageUrl(options.page, options.resultPerPage);
+        $help.httpGET(url, callback);
     };
 
     PunkAPI.prototype.getRandomBeer = function (callback) {

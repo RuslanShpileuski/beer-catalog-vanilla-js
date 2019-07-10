@@ -1,14 +1,13 @@
 (function (window) {
 	function BeerListTemplate() {
 		this.defaultTemplate
-			= '<li data-id="{{id}}">'
-			+ '<div class="view">'
+			= '<div data-id="{{id}}" class="grid-item">'
 			+ '<label>{{name}}</label>'
 			+ '<label>{{tagline}}</label>'
+			+ '<img src="{{image_url}}">'
 			+ '<button class="details">open</button>'
 			+ '<button class="favorite">{{favorite}}</button>'
-			+ '</div>'
-			+ '</li>';
+			+ '</div>';
 	};
 
 	BeerListTemplate.prototype.show = function (data) {
@@ -20,14 +19,15 @@
 			var favorite = '';
 
 			if (data[i].favorite) {
-				favorite = 'favorite';
+				favorite = 'remove favorite';
 			} else {
-				favorite = 'remove favorite'
+				favorite = 'favorite'
 			}
 
 			template = template.replace('{{id}}', data[i].id);
 			template = template.replace('{{name}}', data[i].name);
 			template = template.replace('{{tagline}}', data[i].tagline);
+			template = template.replace('{{image_url}}', data[i].image_url);
 			template = template.replace('{{favorite}}', favorite);
 
 			view = view + template;

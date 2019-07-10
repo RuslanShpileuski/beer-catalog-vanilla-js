@@ -19,12 +19,18 @@
     var beerCatalog = new BeerCatalog('beerCatalog');
 
     function initRouter() {
-        Router.config({mode: ''}).add('/landing-page', function () {
+        Router.config({ mode: '' }).add('/landing', function () {
             console.log('landing-page request');
             beerCatalog.beerController.showBeers();
-        }).add('/beer-details/:id', function () {
-            console.log('beer-details request');
-            beerCatalog.beerController.showBeerDetails(arguments);
+        }).add('/beer/:id', function (routeParams) {
+            console.log('/beer/:id' + routeParams);
+            beerCatalog.beerController.showBeerDetails(routeParams);
+        }).add('/page/:page/perPage/:perPage/', function (routeParams) {
+            console.log('beers-per-page request ' + routeParams);
+            beerCatalog.beerController.loadNextPage(arguments);
+        }).add('/favorite/:id', function (routeParams) {
+            console.log('favorite request' + routeParams);
+            beerCatalog.beerController.markAsFavorite(routeParams);
         });
 
         Router.navigate('/landing-page')
@@ -37,5 +43,6 @@
     };
 
     helper.on(window, 'load', start);
+
 
 })(Helper || {}, Router || {});

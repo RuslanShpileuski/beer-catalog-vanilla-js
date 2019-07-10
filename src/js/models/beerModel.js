@@ -1,9 +1,9 @@
 (function (window) {
     'use strict';
 
-    function BeerModel(webStorage, punkApi) {
+    function BeerModel(webStorage, punkAPI) {
         this.webStorage = webStorage;
-        this.punkApi = punkApi;
+        this.punkAPI = punkAPI;
     }
 
     BeerModel.prototype.readBeers = function (query, callback) {
@@ -12,10 +12,12 @@
 
         if (queryType === 'function') {
             callback = query;
-            return this.punkApi.getBeers(callback);
+            return this.punkAPI.getBeers(callback);
         } else if (queryType === 'string' || queryType === 'number') {
             query = parseInt(query, 10);
-            this.punkApi.getBeerById(query, callback);
+            this.punkAPI.getBeerById(query, callback);
+        } else if (queryType === 'object') {
+            this.punkAPI.getBeersPerPage(query, callback);
         }
     }
 

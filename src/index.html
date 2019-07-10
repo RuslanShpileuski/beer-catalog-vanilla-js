@@ -19,23 +19,13 @@
                 <li>
                     <a href="#/favorites">Favorites</a>
                 </li>
-                <li>
-                    <a href="#/slider">Slider</a>
-                </li>
-                <li>
-                    <a href="#/favorites/details">Favorites/Details</a>
-                </li>
             </ul>
         </header>
         <section id="main">
+            <div id="search">
+            </div>
             <ul id="filters">
-                <li>
-                    <input type="text" placeholder="Search beers...">
-                </li>
-                <li>
-                    <strong>Filter results</strong>
-                </li>
-                <li>
+                <!-- <li>
                     <div>Alcohol by volume:</div>
                     <input title="" type="range" min="1" max="100" value="50" id="abvSlider">
                 </li>
@@ -46,9 +36,11 @@
                 <li>
                     <div>Color by EBC:</div>
                     <input type="range" min="1" max="100" value="50" id="cbebcSlider">
-                </li>
+                </li> -->
             </ul>
-            <ul id="beer-list"></ul>
+            <div id="loading" class=""></div>
+            <div id="beer-list" class="grid-container">
+            </div>
         </section>
         <footer id="footer">
             <span id="beer-count"></span>
@@ -71,7 +63,7 @@
     <script src="js/views/sliderView.js"></script>
 
     <script src="js/controllers/beerController.js"></script>
-    
+
     <script src="js/routing/router.js"></script>
     <script src="js/app.js"></script>
 </body>
