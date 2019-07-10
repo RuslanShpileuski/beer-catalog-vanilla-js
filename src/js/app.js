@@ -19,7 +19,7 @@
     var beerCatalog = new BeerCatalog('beerCatalog');
 
     function initRouter() {
-        Router.config({}).add('/landing-page', function () {
+        Router.config({mode: 'history'}).add('/landing-page', function () {
             beerCatalog.beerController.showBeers();
         }).add('/beer-details/:id', function () {
             beerCatalog.beerController.showBeerDetails(arguments);

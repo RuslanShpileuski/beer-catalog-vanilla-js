@@ -8,7 +8,7 @@ var Router = {
     root: '/',
     config: function (options) {
         this.mode = options && options.mode && options.mode == 'history'
-            && !!(history.pushState) ? 'history' : 'hash';
+            && !!(history.replaceState) ? 'history' : 'hash';
         this.root = options && options.root ? '/' + this.clearSlashes(options.root) + '/' : '/';
         return this;
     },
@@ -85,7 +85,7 @@ var Router = {
         path = path ? path : '';
         if (this.mode === 'history') {
             var witoutSlashes = this.clearSlashes(path);
-            history.pushState(null, null, this.root + witoutSlashes);
+            history.pushState(null, null, witoutSlashes);
         } else {
             window.location.href = window.location.href.replace(/#(.*)$/, '') + '#' + path;
         }

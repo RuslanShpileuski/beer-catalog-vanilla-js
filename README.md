@@ -1,4 +1,4 @@
-# Beer Catalog Vanilla JS
+# Beer Catalog Vanilla JS (ES5)
 
 ## Source of information
 
