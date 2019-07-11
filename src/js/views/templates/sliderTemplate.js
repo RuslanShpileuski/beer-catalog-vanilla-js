@@ -15,15 +15,14 @@
 
     SliderTemplate.prototype.show = function (item) {
         item = item || {};
-        item.settings = item.settings || this.defaultSettings;
         var template = this.defaultTemplate;
         var view = '';
 
         template = template.replace(new RegExp('{{id}}', 'g'), item.id);
         template = template.replace(new RegExp('{{name}}', 'g'), item.name)
-        template = template.replace('{{minValue}}', item.settings.minValue);
-        template = template.replace('{{maxValue}}', item.settings.maxValue);
-        template = template.replace(new RegExp('{{currentValue}}', 'g'), item.settings.currentValue);
+        template = template.replace('{{minValue}}', item.minValue);
+        template = template.replace('{{maxValue}}', item.maxValue);
+        template = template.replace(new RegExp('{{currentValue}}', 'g'), item.currentValue);
         view = view + template;
         return view;
     }

@@ -49,9 +49,27 @@
         self.searchView.render('show');
 
         // slider filters
-        self.sliderView.render('show', { id: 'abvSlider', name: 'Alcohol by volume' });
-        self.sliderView.render('show', { id: 'ibuSlider', name: 'International Bitterness Units' });
-        self.sliderView.render('show', { id: 'cbebcSlider', name: 'Color by EBC' });
+        self.sliderView.render('show', {
+            id: 'abvSlider',
+            name: 'Alcohol by volume',
+            minValue: 2,
+            maxValue: 14,
+            currentValue: 9
+        });
+        self.sliderView.render('show', {
+            id: 'ibuSlider',
+            name: 'International Bitterness Units',
+            minValue: 0,
+            maxValue: 120,
+            currentValue: 60
+        });
+        self.sliderView.render('show', {
+            id: 'cbebcSlider', 
+            name: 'Color by EBC',
+            minValue: 4,
+            maxValue: 80,
+            currentValue: 20
+        });
 
         self.sliderView.bind('onRangeValueChanged', function (attributes) {
             self.seek(attributes);
