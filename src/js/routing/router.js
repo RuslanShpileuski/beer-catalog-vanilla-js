@@ -52,11 +52,12 @@ var Router = {
     },
     check: function (hash) {
         var hash = hash || this.getFragment();
-        var keys, match, routeParams;
+        var keys, match, routeParams, regex;
         for (var i = 0, max = this.routes.length; i < max; i++) {
             routeParams = {}
             keys = this.routes[i].re.match(/:([^\/]+)/g);
-            match = hash.match(new RegExp(this.routes[i].re.replace(/:([^\/]+)/g, "([^\/]*)")));
+            regex = this.routes[i].re.replace(/:([^\/]+)/g, "([^\/]*)");
+            match = hash.match(new RegExp(regex));
             if (match) {
                 match.shift();
                 match.forEach(function (value, i) {

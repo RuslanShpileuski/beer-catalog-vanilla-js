@@ -31,9 +31,9 @@
                     id: self._itemId(this)
                 });
             });
-        } else if (event === 'loadNextPage') {
+        } else if (event === 'nextPage') {
             $help.live('scroll', 'scroll', function () {
-                $help.scroll(handler)
+                $help.onscroll(handler, '#beer-list > div:last-child')
             })
         }
     };

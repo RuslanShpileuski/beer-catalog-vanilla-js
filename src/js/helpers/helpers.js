@@ -1,4 +1,5 @@
 var Helper = (function () {
+    var lastScrollTop = 0;
     return {
         remove: function (target, type, listener, useCapture) {
             target.removeEventListener(type, listener, !!useCapture)
@@ -54,33 +55,29 @@ var Helper = (function () {
             }
             return Helper.parent(element.parentNode, tagName);
         },
-        httpGET: function (url, callback) {
-            var xhr = new XMLHttpRequest();
+        onscroll: function (callback, selector) {
+            var st = window.pageYOffset || document.documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
+            if (st > this.lastScrollTop) {
+                var lastElement = Helper.qs(selector);
+                if (lastElement) {
+                    var lastElementOffset = lastElement.offsetTop + lastElement.clientHeight;
+                    var currentPageOffset = window.pageYOffset + window.innerHeight;
 
-            // fix IE8/9
-            if (!('withCredentials' in xhr)) {
-                xhr = new XDomainRequest();
-            }
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    callback(xhr.responseText);
+                    if (currentPageOffset > lastElementOffset + 10) {
+                        if (lastElement.dataset) {
+                            callback({ lastBeerId: parseInt(lastElement.dataset.id, 10) });
+                        }
+                        else{
+                            callback();
+                        }
+                    }
                 }
             }
-            xhr.open("GET", url, true);
-            xhr.send(null);
-        },
-        scroll: function (callback) {
-            var lastElement = Helper.qs("#beer-list > div:last-child");
-            var lastElementOffset = lastElement.offsetTop + lastElement.clientHeight;
-            var currentPageOffset = window.pageYOffset + window.innerHeight;
 
-            if (currentPageOffset > lastElementOffset + 10) {
-                var id = parseInt(lastElement.dataset.id, 10);
-                console.log('calllback ' + id);
-                callback(id);
-            }
+            this.lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
+
         },
-        isEmptyObject: function(obj){
+        isEmptyObject: function (obj) {
             return Object.keys(obj).length === 0 && obj.constructor === Object
         }
     }

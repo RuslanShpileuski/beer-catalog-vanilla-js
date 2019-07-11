@@ -1,4 +1,4 @@
-(function (window, $help) {
+(function (window, $http) {
     function PunkAPI() {
         var self = this;
 
@@ -30,21 +30,20 @@
             callback = params;
         }
 
-        $help.httpGET(this._buildBeersUrl(params), callback);
+        $http.get(this._buildBeersUrl(params), callback);
     };
 
-    PunkAPI.prototype.getBeersPerPage = function (options, callback) {
-        options = options || { page: 0, resultPerPage: 6 }
-        var url = this._buildBeersPerPageUrl(options.page, options.resultPerPage);
-        $help.httpGET(url, callback);
+    PunkAPI.prototype.getBeersPerPage = function (params, callback) {
+        var url = this._buildBeersPerPageUrl(params.page, params.perPage);
+        $http.get(url, callback);
     };
 
     PunkAPI.prototype.getRandomBeer = function (callback) {
-        $help.httpGET(this._buildRandomBeerUrl(), callback);
+        $http.get(this._buildRandomBeerUrl(), callback);
     };
 
     PunkAPI.prototype.getBeerById = function (id, callback) {
-        $help.httpGET(this._buildBeerByIdUrl(id), callback);
+        $http.get(this._buildBeerByIdUrl(id), callback);
     };
 
     PunkAPI.prototype._buildBeersUrl = function (params) {
@@ -66,8 +65,8 @@
         return url;
     };
 
-    PunkAPI.prototype._buildBeersPerPageUrl = function (page, resultPerPage) {
-        var url = [this.baseUrl, '?page=', page, '&per_page=', resultPerPage].join('');
+    PunkAPI.prototype._buildBeersPerPageUrl = function (page, perPage) {
+        var url = [this.baseUrl, '?page=', page, '&per_page=', perPage].join('');
         return url;
     };
 
@@ -87,4 +86,4 @@
     // Export to window
     window.app = window.app || {};
     window.app.PunkAPI = PunkAPI;
-}(window, Helper || {}));
+}(window, HTTP || {}));

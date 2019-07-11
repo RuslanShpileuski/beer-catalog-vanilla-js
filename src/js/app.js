@@ -3,46 +3,45 @@
 
     function BeerCatalog(name) {
         // Data
-        this.webStorage = new app.WebStorage(name);
         this.punkAPI = new app.PunkAPI();
 
         // MVC 
-        this.beerModel = new app.BeerModel(this.webStorage, this.punkAPI);
+        this.beerModel = new app.BeerModel(this.punkAPI);
         this.beerListTemplate = new app.BeerListTemplate();
         this.beerListView = new app.BeerListView(this.beerListTemplate);
-        this.beerController = new app.BeerController(this.beerModel, this.beerListView);
         this.sliderModel = new app.SliderModel();
         this.sliderTemplate = new app.SliderTemplate();
         this.sliderView = new app.SliderView(this.sliderTemplate);
+        this.searchModel = new app.SearchModel();
+        this.searchTemplate = new app.SearchTemplate();
+        this.searchView = new app.SearchView(this.searchTemplate);
+
+        this.beerController = new app.BeerController({
+            beerModel: this.beerModel,
+            beerView: this.beerListView,
+            sliderModel: this.sliderModel,
+            sliderView: this.sliderView,
+            searchTemplate: this.searchTemplate,
+            searchView: this.searchView
+        });
     }
 
     var beerCatalog = new BeerCatalog('beerCatalog');
 
-    function initRouter() {
+    function init() {
         Router.config({ mode: '' }).add('/landing', function () {
-            console.log('landing-page request');
-            beerCatalog.beerController.showBeers();
-        }).add('/beer/:id', function (routeParams) {
-            console.log('/beer/:id' + routeParams);
-            beerCatalog.beerController.showBeerDetails(routeParams);
-        }).add('/page/:page/perPage/:perPage/', function (routeParams) {
-            console.log('beers-per-page request ' + routeParams);
-            beerCatalog.beerController.loadNextPage(arguments);
-        }).add('/favorite/:id', function (routeParams) {
-            console.log('favorite request' + routeParams);
-            beerCatalog.beerController.markAsFavorite(routeParams);
+        }).add('/beer/:id', function (params) {
+            beerCatalog.beerController.details(params);
+        }).add('/favorite/:id', function (params) {
+            beerCatalog.beerController.markAsFavorite(params);
+        }).add('/page/:page/perPage/:perPage', function (params) {
+            beerCatalog.beerController.nextPage(params);
         });
 
         Router.navigate('/landing-page')
-
         Router.listen();
     }
 
-    var start = function () {
-        initRouter();
-    };
-
-    helper.on(window, 'load', start);
-
+    helper.on(window, 'load', init);
 
 })(Helper || {}, Router || {});

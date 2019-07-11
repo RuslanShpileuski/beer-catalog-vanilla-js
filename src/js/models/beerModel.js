@@ -1,24 +1,10 @@
 (function (window) {
     'use strict';
 
-    function BeerModel(webStorage, punkAPI) {
-        this.webStorage = webStorage;
+    function BeerModel(punkAPI) {
         this.punkAPI = punkAPI;
-    }
-
-    BeerModel.prototype.readBeers = function (query, callback) {
-        var queryType = typeof query;
-        callback = callback || function () { };
-
-        if (queryType === 'function') {
-            callback = query;
-            return this.punkAPI.getBeers(callback);
-        } else if (queryType === 'string' || queryType === 'number') {
-            query = parseInt(query, 10);
-            this.punkAPI.getBeerById(query, callback);
-        } else if (queryType === 'object') {
-            this.punkAPI.getBeersPerPage(query, callback);
-        }
+        this.isFullyLoaded = false;
+        this.pagination = { page: 1, perPage: 20, lastBeerId: 0 };
     }
 
     BeerModel.prototype.read = function (query, callback) {
@@ -27,14 +13,17 @@
 
         if (queryType === 'function') {
             callback = query;
-            return this.webStorage.findAll(callback);
+            this.punkAPI.getBeers(callback);
+
         } else if (queryType === 'string' || queryType === 'number') {
             query = parseInt(query, 10);
-            this.webStorage.find({ id: query }, callback);
-        } else {
-            this.webStorage.find(query, callback);
+            this.punkAPI.getBeerById(query, callback);
+        } else if (queryType === 'object') {
+            if (!this.isFullyLoaded) {
+                this.punkAPI.getBeersPerPage(query, callback);
+            }
         }
-    };
+    }
 
     BeerModel.prototype.remove = function (id, callback) {
         this.webStorage.remove(id, callback);

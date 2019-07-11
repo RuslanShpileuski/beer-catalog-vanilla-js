@@ -22,25 +22,9 @@
             </ul>
         </header>
         <section id="main">
-            <div id="search">
-            </div>
-            <ul id="filters">
-                <!-- <li>
-                    <div>Alcohol by volume:</div>
-                    <input title="" type="range" min="1" max="100" value="50" id="abvSlider">
-                </li>
-                <li>
-                    <div>International Bitterness Units:</div>
-                    <input type="range" min="1" max="100" value="50" id="ibuSlider">
-                </li>
-                <li>
-                    <div>Color by EBC:</div>
-                    <input type="range" min="1" max="100" value="50" id="cbebcSlider">
-                </li> -->
-            </ul>
+            <div id="filters"></div>
             <div id="loading" class=""></div>
-            <div id="beer-list" class="grid-container">
-            </div>
+            <div id="beer-list" class="grid-container"></div>
         </section>
         <footer id="footer">
             <span id="beer-count"></span>
@@ -50,17 +34,21 @@
     </footer>
 
     <script src="js/helpers/helpers.js"></script>
-    <script src="js/data/webStorage.js"></script>
+    <script src="js/helpers/http.js"></script>
     <script src="js/data/punkAPI.js"></script>
 
     <script src="js/models/beerModel.js"></script>
     <script src="js/models/sliderModel.js"></script>
+    <script src="js/models/searchModel.js"></script>
 
     <script src="js/views/templates/beerListTemplate.js"></script>
     <script src="js/views/templates/sliderTemplate.js"></script>
+    <script src="js/views/templates/searchTemplate.js"></script>
 
     <script src="js/views/beerListView.js"></script>
     <script src="js/views/sliderView.js"></script>
+    <script src="js/views/searchView.js"></script>
+
 
     <script src="js/controllers/beerController.js"></script>
 

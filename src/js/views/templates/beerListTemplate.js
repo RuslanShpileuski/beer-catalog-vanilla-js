@@ -1,7 +1,7 @@
 (function (window) {
 	function BeerListTemplate() {
 		this.defaultTemplate
-			= '<div data-id="{{id}}" class="grid-item">'
+			= '<div data-id="{{id}}">'
 			+ '<label>{{name}}</label>'
 			+ '<label>{{tagline}}</label>'
 			+ '<img src="{{image_url}}">'
@@ -38,7 +38,6 @@
 
 	BeerListTemplate.prototype.itemCounter = function (favoriteCount) {
 		var plural = favoriteCount === 1 ? '' : 's';
-
 		return '<strong>' + favoriteCount + '</strong> item' + plural + ' favorite';
 	};
 

@@ -1,51 +1,68 @@
 (function (window) {
-    function BeerController(model, view) {
-        var self = this;
-        self.model = model;
-        self.view = view;
-        self.page = 1;
-
-        self.view.bind('itemShowDetails', function (item) {
-            self.showDetails(item.id);
-        });
-
-        self.view.bind('loadNextPage', function () {
-            console.log('loadNextPage');
-            //Router.navigate('/page/' + self.page + '/perPage/' + 9);
-            self.loadNextPage({ page: self.page++, resultPerPage: 9 });
-        });
+    function BeerController(args) {
+        this.init(args);
     };
 
-    BeerController.prototype.loadNextPage = function (pagination) {
+    BeerController.prototype.nextPage = function (pagination) {
         var self = this;
+        pagination = pagination || self.beerModel.pagination;
         console.log(pagination);
-        self.model.readBeers(pagination, function (beers) {
-            if (!Helper.isEmptyObject(beers)) {
-                beers = JSON.parse(beers);
-                self.view.render('appendEntries', beers);
-            }
+        self.beerModel.read(pagination, function (beers) {
+            self.beerView.render('appendEntries', JSON.parse(beers));
         });
     };
 
-    BeerController.prototype.showBeers = function () {
+    BeerController.prototype.details = function (param) {
         var self = this;
-        self.model.readBeers({ page: 1, resultPerPage: 9 }, function (beers) {
-            beers = JSON.parse(beers);
-            self.view.render('showEntries', beers);
+        self.beerModel.read(param.id, function (beer) {
+            self.beerView.render('showEntries', JSON.parse(beer));
         });
     };
 
-    BeerController.prototype.showDetails = function (id) {
-        Router.navigate('/beer/' + id);
+    BeerController.prototype.seek = function (options) {
+        console.log('seek: ');
+        console.log(options);
     };
 
-    BeerController.prototype.showBeerDetails = function (parameters) {
+    BeerController.prototype.init = function (args) {
         var self = this;
-        self.model.readBeers(parameters.id, function (data) {
-            beers = JSON.parse(data);
-            self.view.render('showEntries', beers);
+        self.beerModel = args.beerModel;
+        self.beerView = args.beerView;
+        self.sliderModel = args.sliderModel;
+        self.sliderView = args.sliderView;
+        self.searchModel = args.searchModel;
+        self.searchView = args.searchView;
+
+        self.beerView.bind('itemShowDetails', function (item) {
+            Router.navigate('/beer/' + item.id);
         });
-    }
+
+        self.beerView.bind('nextPage', function (args) {
+            self.beerModel.pagination.page++;
+            self.beerModel.pagination.lastBeerId = args.lastBeerId;
+            Router.navigate(['/page/', pagination.page, '/perPage/', pagination.perPage].join(''));
+        });
+
+        // search
+        self.searchView.render('show');
+
+        // slider filters
+        self.sliderView.render('show', { id: 'abvSlider', name: 'Alcohol by volume' });
+        self.sliderView.render('show', { id: 'ibuSlider', name: 'International Bitterness Units' });
+        self.sliderView.render('show', { id: 'cbebcSlider', name: 'Color by EBC' });
+
+        self.sliderView.bind('change', function (settings) {
+            self.seek(settings);
+        });
+
+        self.sliderView.bind('change', function (settings) {
+            self.seek(settings);
+        });
+
+        self.searchView.bind('oninput', function (settings) {
+            self.seek(settings);
+        });
+    };
 
     // Export to window
     window.app = window.app || {};
