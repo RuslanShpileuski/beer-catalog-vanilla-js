@@ -25,13 +25,13 @@
 
     BeerListView.prototype.bind = function (event, handler) {
         var self = this;
-        if (event === 'itemShowDetails') {
+        if (event === 'onItemOpenShowDetails') {
             $help.live('#beer-list div button.details', 'click', function () {
                 handler({
                     id: self._itemId(this)
                 });
             });
-        } else if (event === 'nextPage') {
+        } else if (event === 'onScrollNextPage') {
             $help.live('scroll', 'scroll', function () {
                 $help.onscroll(handler, '#beer-list > div:last-child')
             })

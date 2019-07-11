@@ -3,7 +3,6 @@
 
     function BeerModel(punkAPI) {
         this.punkAPI = punkAPI;
-        this.isFullyLoaded = false;
         this.pagination = { page: 1, perPage: 20, lastBeerId: 0 };
     }
 
@@ -13,17 +12,19 @@
 
         if (queryType === 'function') {
             callback = query;
-            this.punkAPI.getBeers(callback);
-
+            return this.punkAPI.getBeers(callback);
         } else if (queryType === 'string' || queryType === 'number') {
             query = parseInt(query, 10);
             this.punkAPI.getBeerById(query, callback);
         } else if (queryType === 'object') {
-            if (!this.isFullyLoaded) {
-                this.punkAPI.getBeersPerPage(query, callback);
-            }
+            this.punkAPI.getBeers(query, callback);
         }
-    }
+    };
+
+    BeerModel.prototype.readPerPage = function (pagination, callback) {
+        callback = callback || function () { };
+        this.punkAPI.getBeersPerPage(pagination, callback);
+    };
 
     BeerModel.prototype.remove = function (id, callback) {
         this.webStorage.remove(id, callback);

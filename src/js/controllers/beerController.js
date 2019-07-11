@@ -20,8 +20,10 @@
     };
 
     BeerController.prototype.seek = function (options) {
-        console.log('seek: ');
-        console.log(options);
+        var self = this;
+        self.beerModel.read(options, function (beers) {
+            self.beerView.render('showEntries', JSON.parse(beers));
+        });
     };
 
     BeerController.prototype.init = function (args) {
@@ -33,11 +35,11 @@
         self.searchModel = args.searchModel;
         self.searchView = args.searchView;
 
-        self.beerView.bind('itemShowDetails', function (item) {
+        self.beerView.bind('onItemOpenShowDetails', function (item) {
             Router.navigate('/beer/' + item.id);
         });
 
-        self.beerView.bind('nextPage', function (args) {
+        self.beerView.bind('onScrollNextPage', function (args) {
             self.beerModel.pagination.page++;
             self.beerModel.pagination.lastBeerId = args.lastBeerId;
             Router.navigate(['/page/', pagination.page, '/perPage/', pagination.perPage].join(''));
@@ -51,16 +53,15 @@
         self.sliderView.render('show', { id: 'ibuSlider', name: 'International Bitterness Units' });
         self.sliderView.render('show', { id: 'cbebcSlider', name: 'Color by EBC' });
 
-        self.sliderView.bind('change', function (settings) {
-            self.seek(settings);
+        self.sliderView.bind('onRangeValueChanged', function (attributes) {
+            self.seek(attributes);
         });
 
-        self.sliderView.bind('change', function (settings) {
-            self.seek(settings);
+        self.sliderView.bind('onRangeValueChanging', function (attributes) {
         });
 
-        self.searchView.bind('oninput', function (settings) {
-            self.seek(settings);
+        self.searchView.bind('onSearchValueChanging', function (attributes) {
+            self.seek(attributes);
         });
     };
 

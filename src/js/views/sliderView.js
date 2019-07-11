@@ -20,14 +20,33 @@
     };
 
     SliderView.prototype.bind = function (event, handler) {
-        if (event === 'change') {
-            $help.live('#filters input#', 'change', function () {
-                handler({
-                    id: this.id,
-                    minValue: this.min,
-                    maxValue: this.max,
-                    currentValue: this.value
-                });
+        if (event === 'onRangeValueChanged') {
+            $help.live('#filters input', 'change', function () {
+                var inputElements = $help.qsa('#filters input');
+                var data = {
+                    abv_gt: 0,
+                    ibu_gt: 0,
+                    ebc_gt: 0
+                };
+
+                for (var i = 0; i < inputElements.length; i++) {
+                    var el = inputElements[i];
+                    if (el.value) {
+                        if (el.id === 'abvSlider') {
+                            data.abv_gt = el.value;
+                        } else if (el.id === 'ibuSlider') {
+                            data.ibu_gt = el.value;
+                        } else if (el.id === 'cbebcSlider') {
+                            data.ebc_gt = el.value;
+                        }
+                    }
+                }
+                handler(data);
+            });
+        } else if (event === 'onRangeValueChanging') {
+            $help.live('#filters input', 'input', function () {
+                this.previousSibling.innerText = this.value;
+                handler(this);
             });
         }
     };

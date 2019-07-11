@@ -1,8 +1,9 @@
 (function (window) {
     function SliderTemplate() {
         this.defaultTemplate = '<div>'
-            + '<div>{{name}}</div>'
-            + '<input type="range" min="{{minValue}}" max="{{maxValue}}" value="{{currentValue}}" id="{{id}}">'
+            + '<label id="{{id}}Value">{{currentValue}}</label>'
+            + '<input type="range" id="{{id}}" name="{{name}}" min="{{minValue}}" max="{{maxValue}}" value="{{currentValue}}">'
+            + '<label for="{{name}}">{{name}}</label>'
             + '</div>';
 
         this.defaultSettings = {
@@ -18,11 +19,11 @@
         var template = this.defaultTemplate;
         var view = '';
 
-        template = template.replace('{{name}}', item.name)
-        template = template.replace('{{id}}', item.id);
+        template = template.replace(new RegExp('{{id}}', 'g'), item.id);
+        template = template.replace(new RegExp('{{name}}', 'g'), item.name)
         template = template.replace('{{minValue}}', item.settings.minValue);
         template = template.replace('{{maxValue}}', item.settings.maxValue);
-        template = template.replace('{{currentValue}}', item.settings.currentValue);
+        template = template.replace(new RegExp('{{currentValue}}', 'g'), item.settings.currentValue);
         view = view + template;
         return view;
     }

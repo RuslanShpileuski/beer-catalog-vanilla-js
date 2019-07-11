@@ -20,7 +20,7 @@
     };
 
     SearchView.prototype.bind = function (event, handler) {
-        if (event === 'oninput') {
+        if (event === 'onSearchValueChanging') {
             $help.live('#filters input#search', 'input', function () {
                 handler(this.value);
             });

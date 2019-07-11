@@ -47,13 +47,18 @@
     };
 
     PunkAPI.prototype._buildBeersUrl = function (params) {
+        var self = this;
         if (!params) {
             return this.baseUrl;
         }
 
         var keys = Object.keys(params);
 
-        if (!this.validParams.includes(keys)) {
+        var result = keys.filter(function (item) {
+            return !self.validParams.includes(item);
+        });
+
+        if (result.length > 0) {
             return this.baseUrl;
         }
 
