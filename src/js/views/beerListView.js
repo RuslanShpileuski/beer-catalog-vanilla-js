@@ -6,6 +6,9 @@
         this.$beersCounter = $help.qs('#beer-count');
     };
 
+    BeerListView.prototype.OnItemOpenShowDetails = 'onItemOpenShowDetails';
+    BeerListView.prototype.OnScrollNextPage = 'onScrollNextPage';
+
     BeerListView.prototype.render = function (viewCmd, parameter) {
         var self = this;
         var viewCommands = {
@@ -25,13 +28,13 @@
 
     BeerListView.prototype.bind = function (event, handler) {
         var self = this;
-        if (event === 'onItemOpenShowDetails') {
+        if (event === self.OnItemOpenShowDetails) {
             $help.live('#beer-list div button.details', 'click', function () {
                 handler({
                     id: self._itemId(this)
                 });
             });
-        } else if (event === 'onScrollNextPage') {
+        } else if (event === self.OnScrollNextPage) {
             $help.live('scroll', 'scroll', function () {
                 $help.onscroll(handler, '#beer-list > div:last-child')
             })

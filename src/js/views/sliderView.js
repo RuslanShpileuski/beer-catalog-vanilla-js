@@ -46,7 +46,7 @@
                 }
                 handler(data);
             });
-        } else if (event === SliderView.prototype.onRangeValueChanging) {
+        } else if (event === SliderView.prototype.OnRangeValueChanging) {
             $help.live('#filters input', 'input', function () {
                 this.nextSibling.innerText = this.value;
                 handler(this);

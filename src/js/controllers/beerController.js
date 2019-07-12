@@ -33,14 +33,12 @@
         self.searchModel = args.searchModel;
         self.searchView = args.searchView;
 
-        self.beerView.bind('onItemOpenShowDetails', function (item) {
+        self.beerView.bind(self.beerView.OnItemOpenShowDetails, function (item) {
             Router.navigate('/beer/' + item.id);
         });
 
-        self.beerView.bind('onScrollNextPage', function (args) {
-            self.beerModel.pagination.page++;
-            self.beerModel.pagination.lastBeerId = args.lastBeerId;
-            Router.navigate(['/page/', pagination.page, '/perPage/', pagination.perPage].join(''));
+        self.beerView.bind(self.beerView.OnScrollNextPage, function (args) {
+            Router.navigate(['/page/', args.page, '/perPage/', args.perPage].join(''));
         });
 
         // search
@@ -69,14 +67,14 @@
             currentValue: 20
         });
 
-        self.sliderView.bind('onRangeValueChanged', function (attributes) {
+        self.sliderView.bind(self.sliderView.OnRangeValueChanged, function (attributes) {
             self.seek(attributes);
         });
 
-        self.sliderView.bind(self.sliderModel.OnRangeValueChanging, function (attributes) {
+        self.sliderView.bind(self.sliderView.OnRangeValueChanging, function (attributes) {
         });
 
-        self.searchView.bind(self.sliderModel.OnSearchValueChanging, function (attributes) {
+        self.searchView.bind(self.searchView.OnSearchValueChanging, function (attributes) {
             self.seek(attributes);
         });
     };

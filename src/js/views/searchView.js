@@ -5,6 +5,8 @@
         this.$filters = $help.qs('#searches');
     };
 
+    SearchView.prototype.OnSearchValueChanging = 'onSearchValueChanging';
+
     SearchView.prototype.render = function (viewCmd, item) {
         var self = this;
         var viewCommands = {
@@ -20,7 +22,9 @@
     };
 
     SearchView.prototype.bind = function (event, handler) {
-        if (event === 'onSearchValueChanging') {
+        var self = this;
+
+        if (event === self.OnSearchValueChanging) {
             $help.live('#searches input#search', 'input', function () {
                 handler(this.value);
             });
