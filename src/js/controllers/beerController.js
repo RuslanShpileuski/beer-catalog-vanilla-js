@@ -3,19 +3,17 @@
         this.init(args);
     };
 
-    BeerController.prototype.nextPage = function (pagination) {
+    BeerController.prototype.next = function (pagination) {
         var self = this;
         pagination = pagination || self.beerModel.pagination;
         console.log(pagination);
         self.beerModel.read(pagination, function (beers) {
-            self.beerView.render('appendEntries', JSON.parse(beers));
-        });
-    };
-
-    BeerController.prototype.details = function (param) {
-        var self = this;
-        self.beerModel.read(param.id, function (beer) {
-            self.beerView.render('showEntries', JSON.parse(beer));
+            if (pagination.page === 1) {
+                self.beerView.render('showEntries', JSON.parse(beers));
+            }
+            else{
+                self.beerView.render('appendEntries', JSON.parse(beers));
+            }
         });
     };
 
@@ -64,7 +62,7 @@
             currentValue: 60
         });
         self.sliderView.render('show', {
-            id: 'cbebcSlider', 
+            id: 'cbebcSlider',
             name: 'Color by EBC',
             minValue: 4,
             maxValue: 80,
@@ -75,10 +73,10 @@
             self.seek(attributes);
         });
 
-        self.sliderView.bind('onRangeValueChanging', function (attributes) {
+        self.sliderView.bind(self.sliderModel.OnRangeValueChanging, function (attributes) {
         });
 
-        self.searchView.bind('onSearchValueChanging', function (attributes) {
+        self.searchView.bind(self.sliderModel.OnSearchValueChanging, function (attributes) {
             self.seek(attributes);
         });
     };

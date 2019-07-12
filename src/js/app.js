@@ -16,6 +16,9 @@
         this.searchTemplate = new app.SearchTemplate();
         this.searchView = new app.SearchView(this.searchTemplate);
 
+        this.beerDetailsTemplate = new app.BeerDetailsTemplate();
+        this.beerDetailsView = new app.BeerDetailsView(this.beerDetailsTemplate);
+
         this.beerController = new app.BeerController({
             beerModel: this.beerModel,
             beerView: this.beerListView,
@@ -24,18 +27,24 @@
             searchTemplate: this.searchTemplate,
             searchView: this.searchView
         });
+
+        this.beerDetailsController = new app.BeerDetailsController({
+            beerDetailsView: this.beerDetailsView,
+            beerModel: this.beerModel
+        });
     }
 
     var beerCatalog = new BeerCatalog('beerCatalog');
 
     function init() {
         Router.config({ mode: '' }).add('/landing', function () {
+            beerCatalog.beerController.next({ page: 1, perPage: 9 });
         }).add('/beer/:id', function (params) {
-            beerCatalog.beerController.details(params);
+            beerCatalog.beerDetailsController.details(params);
         }).add('/favorite/:id', function (params) {
             beerCatalog.beerController.markAsFavorite(params);
         }).add('/page/:page/perPage/:perPage', function (params) {
-            beerCatalog.beerController.nextPage(params);
+            beerCatalog.beerController.next(params);
         });
 
         Router.navigate('/landing-page')

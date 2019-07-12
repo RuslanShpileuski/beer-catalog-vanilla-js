@@ -2,57 +2,75 @@
 <html lang="en" data-framework="javascript">
 
 <head>
-    <meta charset="utf-8">
     <title>VanillaJS • BeerCatalog</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/grid.css">
 </head>
 
-<body>
-    <section id="beerCatalogApp">
-        <header id="header">
-            <h1>Beers</h1>
-            <ul id="menu">
-                <li>
-                    <a href="#/" class="selected">Home</a>
-                </li>
-                <li>
-                    <a href="#/favorites">Favorites</a>
-                </li>
-            </ul>
-        </header>
-        <section id="main">
-            <div id="filters"></div>
-            <div id="loading" class=""></div>
-            <div id="beer-list" class="grid-container"></div>
-        </section>
-        <footer id="footer">
-            <span id="beer-count"></span>
-        </footer>
-    </section>
-    <footer id="info">
-    </footer>
+<body class="subpage">
+    <!-- Header -->
+    <header id="header" class="alt">
+        <div class="logo"><a href="#/">Beer Catalog <span>by iTechArt</span></a></div>
+    </header>
 
+    <!-- Nav -->
+    <nav id="menu">
+        <ul id="links">
+            <li><a href="#/" class="selected">Home</a></li>
+            <li><a href="#/favorites">Favorites</a></li>
+        </ul>
+    </nav>
+
+    <!-- One -->
+    <section id="One" class="wrapper style3">
+        <div class="inner">
+            <header class="align-center">
+                <p>Powered by PunkAPI</p>
+                <h2>BeerCatalog</h2>
+            </header>
+            <div>
+                <div id="searches"></div>
+                <div id="filters"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="beerCatalogApp" class="container">
+        <div id="beer-list" class="grid-container"></div>
+    </section>
+
+    <footer></footer>
+
+    <!-- Additional -->
     <script src="js/helpers/helpers.js"></script>
     <script src="js/helpers/http.js"></script>
     <script src="js/data/punkAPI.js"></script>
+    <script src="js/routing/router.js"></script>
 
+    <!-- Models -->
     <script src="js/models/beerModel.js"></script>
     <script src="js/models/sliderModel.js"></script>
     <script src="js/models/searchModel.js"></script>
 
-    <script src="js/views/templates/beerListTemplate.js"></script>
-    <script src="js/views/templates/sliderTemplate.js"></script>
-    <script src="js/views/templates/searchTemplate.js"></script>
+    <!-- Templates -->
+    <script src="js/templates/beerListTemplate.js"></script>
+    <script src="js/templates/sliderTemplate.js"></script>
+    <script src="js/templates/searchTemplate.js"></script>
+    <script src="js/templates/beerDetailsTemplate.js"></script>
 
+    <!-- Views -->
     <script src="js/views/beerListView.js"></script>
     <script src="js/views/sliderView.js"></script>
     <script src="js/views/searchView.js"></script>
+    <script src="js/views/beerDetailsView.js"></script>
 
-
+    <!-- Controllers -->
     <script src="js/controllers/beerController.js"></script>
+    <script src="js/controllers/beerDetailsController.js"></script>
 
-    <script src="js/routing/router.js"></script>
+    <!-- Main -->
     <script src="js/app.js"></script>
 </body>
 

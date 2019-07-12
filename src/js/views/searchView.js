@@ -2,7 +2,7 @@
 
     function SearchView(template) {
         this.template = template;
-        this.$filters = $help.qs('#filters');
+        this.$filters = $help.qs('#searches');
     };
 
     SearchView.prototype.render = function (viewCmd, item) {
@@ -21,7 +21,7 @@
 
     SearchView.prototype.bind = function (event, handler) {
         if (event === 'onSearchValueChanging') {
-            $help.live('#filters input#search', 'input', function () {
+            $help.live('#searches input#search', 'input', function () {
                 handler(this.value);
             });
         }

@@ -1,10 +1,12 @@
 (function (window) {
 	function BeerListTemplate() {
 		this.defaultTemplate
-			= '<div data-id="{{id}}">'
-			+ '<label>{{name}}</label>'
-			+ '<label>{{tagline}}</label>'
+			= '<div data-id="{{id}}" class="grid-item">'
+			+ '<h2>{{name}}</h2>'
+			+ '<p>{{tagline}}</p>'
+			+ '<div class="image fit">'
 			+ '<img src="{{image_url}}">'
+			+ '</div>'
 			+ '<button class="details">open</button>'
 			+ '<button class="favorite">{{favorite}}</button>'
 			+ '</div>';

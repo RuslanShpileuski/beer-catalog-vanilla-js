@@ -1,9 +1,9 @@
 (function (window) {
     function SliderTemplate() {
         this.defaultTemplate = '<div>'
-            + '<label id="{{id}}Value">{{currentValue}}</label>'
-            + '<input type="range" id="{{id}}" name="{{name}}" min="{{minValue}}" max="{{maxValue}}" value="{{currentValue}}">'
             + '<label for="{{name}}">{{name}}</label>'
+            + '<input type="range" id="{{id}}" name="{{name}}" min="{{minValue}}" max="{{maxValue}}" value="{{currentValue}}">'
+            + '<label id="{{id}}Value">{{currentValue}}</label>'
             + '</div>';
 
         this.defaultSettings = {

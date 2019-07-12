@@ -5,6 +5,9 @@
         this.$filters = $help.qs('#filters');
     };
 
+    SliderView.prototype.OnRangeValueChanged = 'onRangeValueChanged';
+    SliderView.prototype.OnRangeValueChanging = 'onRangeValueChanging';
+
     SliderView.prototype.render = function (viewCmd, data) {
         var self = this;
         var viewCommands = {
@@ -20,7 +23,7 @@
     };
 
     SliderView.prototype.bind = function (event, handler) {
-        if (event === 'onRangeValueChanged') {
+        if (event === SliderView.prototype.OnRangeValueChanged) {
             $help.live('#filters input', 'change', function () {
                 var inputElements = $help.qsa('#filters input');
                 var data = {
@@ -43,9 +46,9 @@
                 }
                 handler(data);
             });
-        } else if (event === 'onRangeValueChanging') {
+        } else if (event === SliderView.prototype.onRangeValueChanging) {
             $help.live('#filters input', 'input', function () {
-                this.previousSibling.innerText = this.value;
+                this.nextSibling.innerText = this.value;
                 handler(this);
             });
         }

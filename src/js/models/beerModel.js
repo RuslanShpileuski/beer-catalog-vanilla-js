@@ -3,7 +3,6 @@
 
     function BeerModel(punkAPI) {
         this.punkAPI = punkAPI;
-        this.pagination = { page: 1, perPage: 20, lastBeerId: 0 };
     }
 
     BeerModel.prototype.read = function (query, callback) {
